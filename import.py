@@ -2,7 +2,7 @@ import requests
 import json
 import unicodedata
 
-#site : www.w3schools.com ==> try except
+# site : www.w3schools.com ==> try except
 
 # ====> REMARQUE : Les Url ci-dessous sont différentes que celles affichées dans la vidéo.
 # C'est normal, continuez bien avec les url de ce fichier
@@ -21,7 +21,9 @@ def strip_accents(s):
 
 
 def get_quizz_filename(categorie, titre, difficulte):
-    return strip_accents(categorie).lower().replace(" ", "") + "_" + strip_accents(titre).lower().replace(" ", "") + "_" + strip_accents(difficulte).lower().replace(" ", "") + ".json"
+    return strip_accents(categorie).lower().replace(" ", "") + "_" + strip_accents(titre).lower().replace(" ",
+                                                                                                          "") + "_" + strip_accents(
+        difficulte).lower().replace(" ", "") + ".json"
 
 
 def generate_json_file(categorie, titre, url):
@@ -30,7 +32,7 @@ def generate_json_file(categorie, titre, url):
     try:
         response = requests.get(url)
     except:
-        print("Exception pour la requete : " + url)
+        print("Exception pour la requete HTTP GET : " + url)
     else:
         try:
             data = json.loads(response.text)
@@ -55,11 +57,8 @@ def generate_json_file(categorie, titre, url):
                 print("end")
 
         except:
-            print("Exception data pour l'url : " + url + " - Questionnaire : " + titre)
-
-
+            print(f"Exception dans la desérialisation ou l'utilisation des données(Questionnaire : {titre}, url : {url}")
 
 
 for quizz_data in open_quizz_db_data:
     generate_json_file(quizz_data[0], quizz_data[1], quizz_data[2])
-

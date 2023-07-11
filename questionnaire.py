@@ -7,8 +7,11 @@ class Question:
         self.bonne_reponse = bonne_reponse
 
     def FromJsonData(data):
+        # Transforme les données choix tuple (titre, bool "bonne reponse") ==> [choix1, choix2 ...]
         choix = [i[0] for i in data["choix"]]
+        # Trouve le bon choix en fonction du bool "bonne réponse"
         bonne_reponse = [i[0] for i in data["choix"] if i[1] == True]
+        # Si aucune bonne réponse ou plusieurs bonnes réponses -> Anomalie dans les donneés
         if len(bonne_reponse) != 1:
             return None
         q = Question(data["titre"], choix, bonne_reponse[0])
@@ -54,7 +57,10 @@ class Questionnaire:
 
     def fromJsonData(data):
         questionnaire_data_questions = data["questions"]
-        questions = [Question.FromJsonData(i) for i in questionnaire_data_questions]
+        # Supprime les questions None (qui n'ont pas pu être crées)
+        #questions = [Question.FromJsonData(i) for i in questionnaire_data_questions if Question.FromJsonData(i) != None]
+        questions = [Question.FromJsonData(i) for i in questionnaire_data_questions ]
+        questions = [i for i in questions if i]
 
         return Questionnaire(questions, data["categorie"], data["titre"], data["difficulte"])
 
