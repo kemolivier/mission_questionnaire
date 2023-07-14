@@ -56,11 +56,21 @@ class Questionnaire:
 
 
     def fromJsonData(data):
+        if not data.get("questions"):
+            return None
         questionnaire_data_questions = data["questions"]
         # Supprime les questions None (qui n'ont pas pu être crées)
         #questions = [Question.FromJsonData(i) for i in questionnaire_data_questions if Question.FromJsonData(i) != None]
         questions = [Question.FromJsonData(i) for i in questionnaire_data_questions ]
         questions = [i for i in questions if i]
+        if not data.get("categorie"):
+             data["categorie"] = "Inconnue"
+
+        if not data.get("difficulte"):
+            data["difficulte"] = "Inconnue"
+
+        if not data.get("titre"):
+            return None
 
         return Questionnaire(questions, data["categorie"], data["titre"], data["difficulte"])
 
@@ -113,13 +123,16 @@ lancer_questionnaire_depuis_fichier_json("cinema_starwars_debutant.json")
 
 print(sys.argv)
 
+if __name__ == '__main__':
 # Lancer le programme par ligne de commande
 # Taper sur la console dans le dossier source : python questionnaire.py ==> ERREUR : Vous devez specifier le nom du fichier json à charger
 # Taper sur la console dans le dossier source : python questionnaire.py animaux_leschats_expert.json (python sur windows ou python3 sous mac)
-if len(sys.argv) < 2:
-    print("ERREUR : Vous devez specifier le nom du fichier json à charger")
-    exit(0)
-json_filename = sys.argv[1]
-questionnaire = Questionnaire.from_json_file(sys.argv[1])
-if questionnaire != None:
-    questionnaire.lancer()
+    if len(sys.argv) < 2:
+        print("ERREUR : Vous devez specifier le nom du fichier json à charger")
+        exit(0)
+    json_filename = sys.argv[1]
+    questionnaire = Questionnaire.from_json_file(sys.argv[1])
+    if questionnaire != None:
+        questionnaire.lancer()
+else:
+    print(__name__)
